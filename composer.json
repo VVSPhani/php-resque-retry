@@ -1,5 +1,5 @@
 {
-    "name": "jaaprood/php-resque-retry",
+    "name": "VVSPhani/php-resque-retry",
     "description": "A php-resque plugin; provides retry, delay and exponential backoff support to php-resque jobs",
     "require": {
         "resque/php-resque": "dev-master",
