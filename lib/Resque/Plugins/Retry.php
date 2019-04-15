@@ -2,6 +2,7 @@
 
 namespace Resque\Plugins;
 use \Resque;
+use Resque\Plugin;
 use \ResqueScheduler;
 
 class Retry {
@@ -10,7 +11,7 @@ class Retry {
 	 * Hook into the job failing
 	 *
 	 * Will attempt to retry the job if all retry criterias pass
-	 * 
+	 *
 	 * @param  	Exception 	$exception
 	 * @param 	Resque_Job 	$job
 	 */
@@ -28,7 +29,7 @@ class Retry {
 	 * Hook into before the job is performed
 	 *
 	 * Sets up the tracking of the of the amount of attempts trying to perform this job
-	 * 
+	 *
 	 * @param 	Resque_Job 	$job
 	 */
 	public function beforePerform($job) {
@@ -46,9 +47,9 @@ class Retry {
 	/**
 	 * Hook into the job having been performed
 	 *
-	 * Cleans up any data we've tracked for retrying now that the job has been successfully 
+	 * Cleans up any data we've tracked for retrying now that the job has been successfully
 	 * performed.
-	 * 
+	 *
 	 * @param 	Resque_Job 	$job
 	 */
 	public function afterPerform($job) {
@@ -64,7 +65,7 @@ class Retry {
 	 */
 	protected function tryAgain($exception, $job) {
 		$retryDelay = $this->retryDelay($job);
-		
+
 		$queue = $job->queue;
 		$class = $job->payload['class'];
 		$arguments = $job->getArguments();
@@ -77,14 +78,14 @@ class Retry {
 			ResqueScheduler::enqueueAt($retryingAt, $queue, $class, $arguments);
 		}
 
-		$job->retrying = true;
-		$job->retryDelay = $retryDelay;
-		$job->retryingAt = $retryingAt;
+		$job->payload['retrying'] = true;
+		$job->payload['retryDelay'] = $retryDelay;
+		$job->payload['retryingAt'] = $retryingAt;
 	}
 
 	/**
 	 * Clean up the retry attempts information from Redis
-	 * 
+	 *
 	 * @param 	Resque_Job 	$job
 	 */
 	protected function cleanRetryKey($job) {
@@ -95,7 +96,7 @@ class Retry {
 
 	/**
 	 * Return the redis key used to track retries
-	 * 
+	 *
 	 * @param 	Resque_Job 	$job
 	 * @param 	string
 	 */
@@ -152,7 +153,7 @@ class Retry {
 	}
 
 	/**
-	 * Get the exceptions defined on the job instance for which this job shoud be 
+	 * Get the exceptions defined on the job instance for which this job shoud be
 	 * retried when it fails.
 	 *
 	 * @param 	Resque_Job 	$job
@@ -219,5 +220,5 @@ class Retry {
 
 		return $default;
 	}
-	
+
 }
