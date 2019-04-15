@@ -2,9 +2,9 @@
     "name": "VVSPhani/php-resque-retry",
     "description": "A php-resque plugin; provides retry, delay and exponential backoff support to php-resque jobs",
     "require": {
-        "resque/php-resque": "dev-master",
+        "resque/php-resque": "^1.3",
         "vvsphani/php-resque-scheduler": "dev-master",
-        "jaaprood/php-resque-plugin": "dev-master"
+        "vvsphani/php-resque-plugin": "dev-master"
     },
     "license": "MIT",
     "authors": [
